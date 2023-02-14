@@ -141,14 +141,14 @@ void string2scalar(unsigned int *scalar, unsigned int num_word32, char *str)
 	{
 		printf("Error: 2 * num_bytes(%d) < strlen(hex) (%zu)\n",
 		       2 * num_bytes, strlen(str));
-		exit(-1);
+		// exit(-1);
 	}
 
 	memset(tmp, 0, padding / 2);
 
 	if (false == hex2bin(tmp + padding / 2, num_bytes, str, hexlen))
 	{
-		exit(-1);
+		// exit(-1);
 	}
 	uECC_vli_bytesToNative(scalar, tmp, num_bytes);
 

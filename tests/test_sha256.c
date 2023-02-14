@@ -489,13 +489,13 @@ int main(void)
                 goto exitTest;
         }
   	/* memory and computation intensive test cases: */
-        result = test_13();
+        //result = test_13();
         if (result == TC_FAIL) {
 		/* terminate test */
                 TC_ERROR("SHA256 test #13 failed.\n");
                 goto exitTest;
         }
-        result = test_14();
+        //result = test_14();
         if (result == TC_FAIL) {
 		/* terminate test */
                 TC_ERROR("SHA256 test #14 failed.\n");

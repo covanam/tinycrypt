@@ -430,7 +430,7 @@ int montecarlo_ecdh(int num_tests, bool verbose)
 	for (i = 0; i < num_tests; ++i) {
 		if (verbose) {
 			TC_PRINT(".");
-			fflush(stdout);
+			// fflush(stdout);
 		}
 
 		if (!uECC_make_key(public1, private1, curve) ||

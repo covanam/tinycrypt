@@ -44,10 +44,7 @@
 
 #define PRINT_DATA(fmt, ...) printf(fmt, ##__VA_ARGS__)
 
-#define PRINT_LINE                                                     \
-	PRINT_DATA(                                                        \
-		"============================================================" \
-		"=======\n")
+#define PRINT_LINE
 
 
 #define FAIL "FAIL"
@@ -77,11 +74,13 @@
 	} while (0)
 
 #define TC_END_REPORT(result)                               \
+	extern uint32_t _test_mem;                              \
 	do {                                                    \
-		PRINT_LINE;                                         \
-		TC_END(result,                                      \
-			"PROJECT EXECUTION %s\n",               \
-			result == TC_PASS ? "SUCCESSFUL" : "FAILED");   \
+		if (result == TC_PASS)                              \
+			_test_mem = 0xcafebabe;                         \
+		else                                                \
+			_test_mem = 0xdeadbeef;                         \
+		return 0;                                           \
 	} while (0)
 
 static inline void show_str(const char *label, const uint8_t *s, size_t len)
