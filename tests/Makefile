@@ -22,49 +22,104 @@ clean:
 	-$(RM) $(TEST_BINARY) $(TEST_OBJECTS) $(TEST_DEPS)
 	-$(RM) *~ *.o *.d
 
+s_aes_decrypt.o: aes_decrypt.o ../../../harden
+	../../../harden $< $@
+s_aes_encrypt.o: aes_encrypt.o ../../../harden
+	../../../harden $< $@ 
+s_cbc_mode.o: cbc_mode.o ../../../harden
+	../../../harden $< $@
+s_ccm_mode.o: ccm_mode.o ../../../harden
+	../../../harden $< $@
+s_cmac_mode.o: cmac_mode.o ../../../harden
+	../../../harden $< $@
+s_ctr_mode.o: ctr_mode.o ../../../harden
+	../../../harden $< $@
+s_ctr_prng.o: ctr_prng.o ../../../harden
+	../../../harden $< $@
+s_ecc_dh.o: ecc_dh.o ../../../harden
+	../../../harden $< $@
+s_ecc_dsa.o: ecc_dsa.o ../../../harden
+	../../../harden $< $@
+s_ecc.o: ecc.o ../../../harden
+	../../../harden $< $@
+s_ecc_platform_specific.o: ecc_platform_specific.o ../../../harden
+	../../../harden $< $@
+s_hmac.o: hmac.o ../../../harden
+	../../../harden $< $@
+s_hmac_prng.o: hmac_prng.o ../../../harden
+	../../../harden $< $@
+s_sha256.o: sha256.o ../../../harden
+	../../../harden $< $@
+s_test_aes.o: test_aes.o ../../../harden
+	../../../harden $< $@
+s_test_cbc_mode.o: test_cbc_mode.o ../../../harden
+	../../../harden $< $@
+s_test_ccm_mode.o: test_ccm_mode.o ../../../harden
+	../../../harden $< $@
+s_test_cmac_mode.o: test_cmac_mode.o ../../../harden
+	../../../harden $< $@
+s_test_ctr_mode.o: test_ctr_mode.o ../../../harden
+	../../../harden $< $@
+s_test_ctr_prng.o: test_ctr_prng.o ../../../harden
+	../../../harden $< $@
+s_test_ecc_dh.o: test_ecc_dh.o ../../../harden
+	../../../harden $< $@
+s_test_ecc_dsa.o: test_ecc_dsa.o ../../../harden
+	../../../harden $< $@
+s_test_ecc_utils.o: test_ecc_utils.o ../../../harden
+	../../../harden $< $@
+s_test_hmac.o: test_hmac.o ../../../harden
+	../../../harden $< $@
+s_test_hmac_prng.o: test_hmac_prng.o ../../../harden
+	../../../harden $< $@
+s_test_sha256.o: test_sha256.o ../../../harden
+	../../../harden $< $@
+s_utils.o: utils.o ../../../harden
+	../../../harden $< $@
+
 # Dependencies
-test_aes$(DOTEXE): test_aes.o  aes_encrypt.o aes_decrypt.o utils.o \
+test_aes$(DOTEXE): s_test_aes.o s_aes_encrypt.o s_aes_decrypt.o s_utils.o \
 		../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_cbc_mode$(DOTEXE): test_cbc_mode.o cbc_mode.o \
-		aes_encrypt.o aes_decrypt.o utils.o ../../startup.o ../../stdlib.o
+test_cbc_mode$(DOTEXE): s_test_cbc_mode.o s_cbc_mode.o \
+		s_aes_encrypt.o s_aes_decrypt.o s_utils.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_ctr_mode$(DOTEXE): test_ctr_mode.o ctr_mode.o \
-		aes_encrypt.o utils.o ../../startup.o ../../stdlib.o
+test_ctr_mode$(DOTEXE): s_test_ctr_mode.o s_ctr_mode.o \
+		s_aes_encrypt.o s_utils.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_ctr_prng$(DOTEXE): test_ctr_prng.o ctr_prng.o \
-		aes_encrypt.o utils.o ../../startup.o ../../stdlib.o
+test_ctr_prng$(DOTEXE): s_test_ctr_prng.o s_ctr_prng.o \
+		s_aes_encrypt.o s_utils.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_cmac_mode$(DOTEXE): test_cmac_mode.o aes_encrypt.o utils.o \
-		cmac_mode.o ../../startup.o ../../stdlib.o
+test_cmac_mode$(DOTEXE): s_test_cmac_mode.o s_aes_encrypt.o s_utils.o \
+		s_cmac_mode.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_ccm_mode$(DOTEXE): test_ccm_mode.o aes_encrypt.o \
-		utils.o ccm_mode.o ../../startup.o ../../stdlib.o
+test_ccm_mode$(DOTEXE): s_test_ccm_mode.o s_aes_encrypt.o \
+		s_utils.o s_ccm_mode.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_hmac$(DOTEXE): test_hmac.o  hmac.o sha256.o utils.o \
+test_hmac$(DOTEXE): s_test_hmac.o s_hmac.o s_sha256.o s_utils.o \
 		../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_hmac_prng$(DOTEXE): test_hmac_prng.o hmac_prng.o hmac.o \
-		sha256.o utils.o ../../startup.o ../../stdlib.o
+test_hmac_prng$(DOTEXE): s_test_hmac_prng.o s_hmac_prng.o s_hmac.o \
+		s_sha256.o s_utils.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_sha256$(DOTEXE): test_sha256.o sha256.o utils.o \
+test_sha256$(DOTEXE): s_test_sha256.o s_sha256.o s_utils.o \
 		../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_ecc_dh$(DOTEXE): test_ecc_dh.o ecc.o ecc_dh.o test_ecc_utils.o ecc_platform_specific.o
+test_ecc_dh$(DOTEXE): s_test_ecc_dh.o s_ecc.o s_ecc_dh.o s_test_ecc_utils.o s_ecc_platform_specific.o
 	touch $@
 #	$(LINK.o) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-test_ecc_dsa$(DOTEXE): test_ecc_dsa.o ecc.o utils.o ecc_dh.o \
-		ecc_dsa.o sha256.o test_ecc_utils.o ecc_platform_specific.o
+test_ecc_dsa$(DOTEXE): s_test_ecc_dsa.o s_ecc.o s_utils.o s_ecc_dh.o \
+		s_ecc_dsa.o s_sha256.o s_test_ecc_utils.o s_ecc_platform_specific.o
 #	$(LINK.o) $^ $(LOADLIBES) $(LDLIBS) -o $@
 	touch $@
 
