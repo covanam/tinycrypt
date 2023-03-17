@@ -34,7 +34,7 @@
 #include <tinycrypt/constants.h>
 #include <tinycrypt/utils.h>
 
-static void compress(unsigned int *iv, const uint8_t *data);
+void compress(unsigned int *iv, const uint8_t *data);
 
 int tc_sha256_init(TCSha256State_t s)
 {
@@ -154,7 +154,7 @@ static const unsigned int k256[64] = {
 	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-static inline unsigned int ROTR(unsigned int a, unsigned int n)
+unsigned int ROTR(unsigned int a, unsigned int n)
 {
 	return (((a) >> n) | ((a) << (32 - n)));
 }
@@ -167,7 +167,7 @@ static inline unsigned int ROTR(unsigned int a, unsigned int n)
 #define Ch(a, b, c)(((a) & (b)) ^ ((~(a)) & (c)))
 #define Maj(a, b, c)(((a) & (b)) ^ ((a) & (c)) ^ ((b) & (c)))
 
-static inline unsigned int BigEndian(const uint8_t **c)
+unsigned int BigEndian(const uint8_t **c)
 {
 	unsigned int n = 0;
 
@@ -178,7 +178,7 @@ static inline unsigned int BigEndian(const uint8_t **c)
 	return n;
 }
 
-static void compress(unsigned int *iv, const uint8_t *data)
+void compress(unsigned int *iv, const uint8_t *data)
 {
 	unsigned int a, b, c, d, e, f, g, h;
 	unsigned int s0, s1;

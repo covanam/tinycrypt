@@ -50,7 +50,7 @@
  *  @param arr IN/OUT -- array to be incremented
  *  @param len IN -- size of arr in bytes
  */
-static void arrInc(uint8_t arr[], unsigned int len)
+void arrInc(uint8_t arr[], unsigned int len)
 {
 	unsigned int i;
 	if (0 != arr) {
@@ -71,7 +71,7 @@ static void arrInc(uint8_t arr[], unsigned int len)
  *  @param ctx IN/OUT -- CTR PRNG state
  *  @param providedData IN -- data used when updating the internal state
  */
-static void tc_ctr_prng_update(TCCtrPrng_t * const ctx, uint8_t const * const providedData)
+void tc_ctr_prng_update(TCCtrPrng_t * const ctx, uint8_t const * const providedData)
 {
 	if (0 != ctx) {
 		/* 10.2.1.2 step 1 */

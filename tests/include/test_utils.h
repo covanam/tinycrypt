@@ -83,42 +83,12 @@
 		return 0;                                           \
 	} while (0)
 
-static inline void show_str(const char *label, const uint8_t *s, size_t len)
-{
-        unsigned int i;
+void show_str(const char *label, const uint8_t *s, size_t len);
 
-        TC_PRINT("%s = ", label);
-        for (i = 0; i < (unsigned int) len; ++i) {
-                TC_PRINT("%02x", s[i]);
-        }
-        TC_PRINT("\n");
-}
+void fatal(unsigned int testnum, const void *expected, size_t expectedlen,
+           const void *computed, size_t computedlen);
 
-static inline void fatal(unsigned int testnum, const void *expected, size_t expectedlen,
-           const void *computed, size_t computedlen)
-{
-
-        TC_ERROR("\tTest #%d Failed!\n", testnum);
-        show_str("\t\tExpected", expected, expectedlen);
-        show_str("\t\tComputed  ", computed, computedlen);
-        TC_PRINT("\n");
-}
-
-static inline unsigned int check_result(unsigned int testnum, const void *expected, size_t expectedlen,
-                   const void *computed, size_t computedlen)
-{
-	unsigned int result = TC_PASS;
-
-        if (expectedlen != computedlen) {
-                TC_ERROR("The length of the computed buffer (%zu)", computedlen);
-                TC_ERROR("does not match the expected length (%zu).", expectedlen);
-                result = TC_FAIL;
-        } else if (memcmp(computed, expected, computedlen) != 0) {
-                fatal(testnum, expected, expectedlen, computed, computedlen);
-                result = TC_FAIL;
-        }
-
-        return result;
-}
+unsigned int check_result(unsigned int testnum, const void *expected, size_t expectedlen,
+                   const void *computed, size_t computedlen);
 
 #endif /* __TEST_UTILS_H__ */

@@ -61,7 +61,7 @@ int tc_ccm_config(TCCcmMode_t c, TCAesKeySched_t sched, uint8_t *nonce,
 /**
  * Variation of CBC-MAC mode used in CCM.
  */
-static void ccm_cbc_mac(uint8_t *T, const uint8_t *data, unsigned int dlen,
+void ccm_cbc_mac(uint8_t *T, const uint8_t *data, unsigned int dlen,
 			unsigned int flag, TCAesKeySched_t sched)
 {
 
@@ -90,7 +90,7 @@ static void ccm_cbc_mac(uint8_t *T, const uint8_t *data, unsigned int dlen,
  * encryption). Besides, it is assumed that the counter is stored in the last
  * 2 bytes of the nonce.
  */
-static int ccm_ctr_mode(uint8_t *out, unsigned int outlen, const uint8_t *in,
+int ccm_ctr_mode(uint8_t *out, unsigned int outlen, const uint8_t *in,
 			unsigned int inlen, uint8_t *ctr, const TCAesKeySched_t sched)
 {
 

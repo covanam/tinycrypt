@@ -8,7 +8,7 @@
 
 include ../config.mk
 
-TEST_LIB_FILE:=test_ecc_utils.c
+TEST_LIB_FILE:=test_ecc_utils.c test_utils.c
 TEST_SOURCE:=$(filter-out $(TEST_LIB_FILE), $(wildcard test_*.c))
 
 TEST_OBJECTS:=$(TEST_SOURCE:.c=.o)
@@ -78,39 +78,39 @@ s_utils.o: utils.o ../../../harden
 	../../../harden $< $@
 
 # Dependencies
-test_aes$(DOTEXE): s_test_aes.o s_aes_encrypt.o s_aes_decrypt.o s_utils.o \
+test_aes$(DOTEXE): s_test_aes.o s_aes_encrypt.o s_aes_decrypt.o s_utils.o test_utils.o\
 		../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_cbc_mode$(DOTEXE): s_test_cbc_mode.o s_cbc_mode.o \
+test_cbc_mode$(DOTEXE): s_test_cbc_mode.o s_cbc_mode.o test_utils.o\
 		s_aes_encrypt.o s_aes_decrypt.o s_utils.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_ctr_mode$(DOTEXE): s_test_ctr_mode.o s_ctr_mode.o \
+test_ctr_mode$(DOTEXE): s_test_ctr_mode.o s_ctr_mode.o test_utils.o\
 		s_aes_encrypt.o s_utils.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_ctr_prng$(DOTEXE): s_test_ctr_prng.o s_ctr_prng.o \
+test_ctr_prng$(DOTEXE): s_test_ctr_prng.o s_ctr_prng.o test_utils.o\
 		s_aes_encrypt.o s_utils.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_cmac_mode$(DOTEXE): s_test_cmac_mode.o s_aes_encrypt.o s_utils.o \
+test_cmac_mode$(DOTEXE): s_test_cmac_mode.o s_aes_encrypt.o s_utils.o test_utils.o\
 		s_cmac_mode.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_ccm_mode$(DOTEXE): s_test_ccm_mode.o s_aes_encrypt.o \
+test_ccm_mode$(DOTEXE): s_test_ccm_mode.o s_aes_encrypt.o test_utils.o\
 		s_utils.o s_ccm_mode.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_hmac$(DOTEXE): s_test_hmac.o s_hmac.o s_sha256.o s_utils.o \
+test_hmac$(DOTEXE): s_test_hmac.o s_hmac.o s_sha256.o s_utils.o test_utils.o\
 		../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_hmac_prng$(DOTEXE): s_test_hmac_prng.o s_hmac_prng.o s_hmac.o \
+test_hmac_prng$(DOTEXE): s_test_hmac_prng.o s_hmac_prng.o s_hmac.o test_utils.o\
 		s_sha256.o s_utils.o ../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-test_sha256$(DOTEXE): s_test_sha256.o s_sha256.o s_utils.o \
+test_sha256$(DOTEXE): s_test_sha256.o s_sha256.o s_utils.o test_utils.o\
 		../../startup.o ../../stdlib.o
 	$(LD) $(LDFLAGS) $^ -o $@
 

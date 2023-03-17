@@ -42,7 +42,7 @@
 #include <string.h>
 
 /* utility function to convert hex character representation to their nibble (4 bit) values */
-static uint8_t nibbleFromChar(char c)
+uint8_t nibbleFromChar(char c)
 {
 	if(c >= '0' && c <= '9') return c - '0';
 	if(c >= 'a' && c <= 'f') return c - 'a' + 10U;
@@ -249,7 +249,7 @@ PRNG_Vector vectors[] = {
 	}
 };
 
-static unsigned int executePRNG_TestVector(PRNG_Vector vector, unsigned int idx)
+unsigned int executePRNG_TestVector(PRNG_Vector vector, unsigned int idx)
 {
 	unsigned int result = TC_PASS;
 	uint8_t * entropy    = hexStringToBytes(vector.entropyString);
@@ -310,7 +310,7 @@ static unsigned int executePRNG_TestVector(PRNG_Vector vector, unsigned int idx)
 	return result;
 }
 
-static int test_reseed(void)
+int test_reseed(void)
 {
 	int result = TC_PASS;
 	uint8_t entropy[32U] = {0U}; /* value not important */
@@ -405,7 +405,7 @@ static int test_reseed(void)
 	return result;
 }
 
-static int test_uninstantiate(void)
+int test_uninstantiate(void)
 {
 	unsigned int i;
 	int result = TC_PASS;
@@ -440,7 +440,7 @@ static int test_uninstantiate(void)
 	return result;
 }
 
-static int test_robustness(void)
+int test_robustness(void)
 {
 	int result = TC_PASS;
 	int ret;

@@ -51,7 +51,7 @@
 
 #define BUF_LEN 16
 
-static void show(const char *label, const uint8_t *s, size_t slen)
+void show(const char *label, const uint8_t *s, size_t slen)
 {
 	unsigned int i;
 
@@ -64,7 +64,7 @@ static void show(const char *label, const uint8_t *s, size_t slen)
 
 extern void gf_double(uint8_t *out, uint8_t *in);
 
-static int verify_gf_2_128_double(uint8_t *K1, uint8_t *K2,
+int verify_gf_2_128_double(uint8_t *K1, uint8_t *K2,
 				  struct tc_cmac_struct s)
 {
 	int result = TC_PASS;
@@ -115,7 +115,7 @@ static int verify_gf_2_128_double(uint8_t *K1, uint8_t *K2,
 	return result;
 }
 
-static int verify_cmac_null_msg(TCCmacState_t s)
+int verify_cmac_null_msg(TCCmacState_t s)
 {
 	int result = TC_PASS;
 
@@ -142,7 +142,7 @@ static int verify_cmac_null_msg(TCCmacState_t s)
 	return result;
 }
 
-static int verify_cmac_1_block_msg(TCCmacState_t s)
+int verify_cmac_1_block_msg(TCCmacState_t s)
 {
 	int result = TC_PASS;
 
@@ -174,7 +174,7 @@ static int verify_cmac_1_block_msg(TCCmacState_t s)
 	return result;
 }
 
-static int verify_cmac_320_bit_msg(TCCmacState_t s)
+int verify_cmac_320_bit_msg(TCCmacState_t s)
 {
 	int result = TC_PASS;
 
@@ -209,7 +209,7 @@ static int verify_cmac_320_bit_msg(TCCmacState_t s)
 	return result;
 }
 
-static int verify_cmac_512_bit_msg(TCCmacState_t s)
+int verify_cmac_512_bit_msg(TCCmacState_t s)
 {
 	int result = TC_PASS;
 

@@ -59,7 +59,7 @@ static const uint8_t sbox[256] = {
 	0xb0, 0x54, 0xbb, 0x16
 };
 
-static inline unsigned int rotword(unsigned int a)
+unsigned int rotword(unsigned int a)
 {
 	return (((a) >> 24)|((a) << 8));
 }
@@ -98,7 +98,7 @@ int tc_aes128_set_encrypt_key(TCAesKeySched_t s, const uint8_t *k)
 	return TC_CRYPTO_SUCCESS;
 }
 
-static inline void add_round_key(uint8_t *s, const unsigned int *k)
+void add_round_key_hi2(uint8_t *s, const unsigned int *k)
 {
 	s[0] ^= (uint8_t)(k[0] >> 24); s[1] ^= (uint8_t)(k[0] >> 16);
 	s[2] ^= (uint8_t)(k[0] >> 8); s[3] ^= (uint8_t)(k[0]);
@@ -110,7 +110,7 @@ static inline void add_round_key(uint8_t *s, const unsigned int *k)
 	s[14] ^= (uint8_t)(k[3] >> 8); s[15] ^= (uint8_t)(k[3]);
 }
 
-static inline void sub_bytes(uint8_t *s)
+void sub_bytes(uint8_t *s)
 {
 	unsigned int i;
 
@@ -121,7 +121,7 @@ static inline void sub_bytes(uint8_t *s)
 
 #define triple(a)(_double_byte(a)^(a))
 
-static inline void mult_row_column(uint8_t *out, const uint8_t *in)
+void mult_row_column_hello(uint8_t *out, const uint8_t *in)
 {
 	out[0] = _double_byte(in[0]) ^ triple(in[1]) ^ in[2] ^ in[3];
 	out[1] = in[0] ^ _double_byte(in[1]) ^ triple(in[2]) ^ in[3];
@@ -129,14 +129,14 @@ static inline void mult_row_column(uint8_t *out, const uint8_t *in)
 	out[3] = triple(in[0]) ^ in[1] ^ in[2] ^ _double_byte(in[3]);
 }
 
-static inline void mix_columns(uint8_t *s)
+void mix_columns(uint8_t *s)
 {
 	uint8_t t[Nb*Nk];
 
-	mult_row_column(t, s);
-	mult_row_column(&t[Nb], s+Nb);
-	mult_row_column(&t[2 * Nb], s + (2 * Nb));
-	mult_row_column(&t[3 * Nb], s + (3 * Nb));
+	mult_row_column_hello(t, s);
+	mult_row_column_hello(&t[Nb], s+Nb);
+	mult_row_column_hello(&t[2 * Nb], s + (2 * Nb));
+	mult_row_column_hello(&t[3 * Nb], s + (3 * Nb));
 	(void) _copy(s, sizeof(t), t, sizeof(t));
 }
 
@@ -144,7 +144,7 @@ static inline void mix_columns(uint8_t *s)
  * This shift_rows also implements the matrix flip required for mix_columns, but
  * performs it here to reduce the number of memory operations.
  */
-static inline void shift_rows(uint8_t *s)
+void shift_rows(uint8_t *s)
 {
 	uint8_t t[Nb * Nk];
 
@@ -169,18 +169,18 @@ int tc_aes_encrypt(uint8_t *out, const uint8_t *in, const TCAesKeySched_t s)
 	}
 
 	(void)_copy(state, sizeof(state), in, sizeof(state));
-	add_round_key(state, s->words);
+	add_round_key_hi2(state, s->words);
 
 	for (i = 0; i < (Nr - 1); ++i) {
 		sub_bytes(state);
 		shift_rows(state);
 		mix_columns(state);
-		add_round_key(state, s->words + Nb*(i+1));
+		add_round_key_hi2(state, s->words + Nb*(i+1));
 	}
 
 	sub_bytes(state);
 	shift_rows(state);
-	add_round_key(state, s->words + Nb*(i+1));
+	add_round_key_hi2(state, s->words + Nb*(i+1));
 
 	(void)_copy(out, sizeof(state), state, sizeof(state));
 

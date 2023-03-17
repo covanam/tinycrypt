@@ -132,7 +132,7 @@ void string2scalar(unsigned int *scalar, unsigned int num_word32, char *str)
 {
 
 	unsigned int num_bytes = 4 * num_word32;
-	uint8_t tmp[num_bytes];
+	uint8_t* tmp = malloc(num_bytes);
 	size_t hexlen = strlen(str);
 
 	int padding;
@@ -152,6 +152,7 @@ void string2scalar(unsigned int *scalar, unsigned int num_word32, char *str)
 	}
 	uECC_vli_bytesToNative(scalar, tmp, num_bytes);
 
+	free(tmp);
 }
 
 void vli_print_bytes(uint8_t *vli, unsigned int size)

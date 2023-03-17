@@ -34,7 +34,7 @@
 #include <tinycrypt/constants.h>
 #include <tinycrypt/utils.h>
 
-static void rekey(uint8_t *key, const uint8_t *new_key, unsigned int key_size)
+void rekey(uint8_t *key, const uint8_t *new_key, unsigned int key_size)
 {
 	const uint8_t inner_pad = (uint8_t) 0x36;
 	const uint8_t outer_pad = (uint8_t) 0x5c;

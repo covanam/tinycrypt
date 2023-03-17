@@ -58,7 +58,7 @@
 #include <tinycrypt/ecc_dsa.h>
 
 
-static void bits2int(uECC_word_t *native, const uint8_t *bits,
+void bits2int(uECC_word_t *native, const uint8_t *bits,
 		     unsigned bits_size, uECC_Curve curve)
 {
 	unsigned num_n_bytes = BITS_TO_BYTES(curve->num_n_bits);
@@ -179,7 +179,7 @@ int uECC_sign(const uint8_t *private_key, const uint8_t *message_hash,
 	return 0;
 }
 
-static bitcount_t smax(bitcount_t a, bitcount_t b)
+bitcount_t smax(bitcount_t a, bitcount_t b)
 {
 	return (a > b ? a : b);
 }

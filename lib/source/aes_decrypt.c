@@ -70,7 +70,7 @@ int tc_aes128_set_decrypt_key(TCAesKeySched_t s, const uint8_t *k)
 #define multd(a)(mult8(a)^_double_byte(_double_byte(a))^(a))
 #define multe(a)(mult8(a)^_double_byte(_double_byte(a))^_double_byte(a))
 
-static inline void mult_row_column(uint8_t *out, const uint8_t *in)
+void mult_row_column_hi(uint8_t *out, const uint8_t *in)
 {
 	out[0] = multe(in[0]) ^ multb(in[1]) ^ multd(in[2]) ^ mult9(in[3]);
 	out[1] = mult9(in[0]) ^ multe(in[1]) ^ multb(in[2]) ^ multd(in[3]);
@@ -78,18 +78,18 @@ static inline void mult_row_column(uint8_t *out, const uint8_t *in)
 	out[3] = multb(in[0]) ^ multd(in[1]) ^ mult9(in[2]) ^ multe(in[3]);
 }
 
-static inline void inv_mix_columns(uint8_t *s)
+void inv_mix_columns(uint8_t *s)
 {
 	uint8_t t[Nb*Nk];
 
-	mult_row_column(t, s);
-	mult_row_column(&t[Nb], s+Nb);
-	mult_row_column(&t[2*Nb], s+(2*Nb));
-	mult_row_column(&t[3*Nb], s+(3*Nb));
+	mult_row_column_hi(t, s);
+	mult_row_column_hi(&t[Nb], s+Nb);
+	mult_row_column_hi(&t[2*Nb], s+(2*Nb));
+	mult_row_column_hi(&t[3*Nb], s+(3*Nb));
 	(void)_copy(s, sizeof(t), t, sizeof(t));
 }
 
-static inline void add_round_key(uint8_t *s, const unsigned int *k)
+void add_round_key_hi(uint8_t *s, const unsigned int *k)
 {
 	s[0] ^= (uint8_t)(k[0] >> 24); s[1] ^= (uint8_t)(k[0] >> 16);
 	s[2] ^= (uint8_t)(k[0] >> 8); s[3] ^= (uint8_t)(k[0]);
@@ -101,7 +101,7 @@ static inline void add_round_key(uint8_t *s, const unsigned int *k)
 	s[14] ^= (uint8_t)(k[3] >> 8); s[15] ^= (uint8_t)(k[3]);
 }
 
-static inline void inv_sub_bytes(uint8_t *s)
+void inv_sub_bytes(uint8_t *s)
 {
 	unsigned int i;
 
@@ -115,7 +115,7 @@ static inline void inv_sub_bytes(uint8_t *s)
  * inv_mix_columns, but performs it here to reduce the number of memory
  * operations.
  */
-static inline void inv_shift_rows(uint8_t *s)
+void inv_shift_rows(uint8_t *s)
 {
 	uint8_t t[Nb*Nk];
 
@@ -141,18 +141,18 @@ int tc_aes_decrypt(uint8_t *out, const uint8_t *in, const TCAesKeySched_t s)
 
 	(void)_copy(state, sizeof(state), in, sizeof(state));
 
-	add_round_key(state, s->words + Nb*Nr);
+	add_round_key_hi(state, s->words + Nb*Nr);
 
 	for (i = Nr - 1; i > 0; --i) {
 		inv_shift_rows(state);
 		inv_sub_bytes(state);
-		add_round_key(state, s->words + Nb*i);
+		add_round_key_hi(state, s->words + Nb*i);
 		inv_mix_columns(state);
 	}
 
 	inv_shift_rows(state);
 	inv_sub_bytes(state);
-	add_round_key(state, s->words);
+	add_round_key_hi(state, s->words);
 
 	(void)_copy(out, sizeof(state), state, sizeof(state));
 
